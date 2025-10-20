@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace _01_Scripts.BulletLauncherSystem
 {
-    public class KeyGameController : IGameController
+    public class KeyGameController : MonoBehaviour, IGameController
     {
-        public bool FireButtonPressed()
+        public Action FireButtonPressed;
+
+        private void Update()
         {
-            return Input.GetKeyDown(KeyCode.Space);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                FireButtonPressed?.Invoke();
+            }
         }
     }
 }

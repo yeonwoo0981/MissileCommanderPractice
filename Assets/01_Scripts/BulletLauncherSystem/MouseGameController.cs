@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace _01_Scripts.BulletLauncherSystem
 {
-    public class MouseGameController : IGameController
+    public class MouseGameController : MonoBehaviour, IGameController
     {
-        public bool FireButtonPressed()
+        public Action FireButtonPressed;
+
+        private void Update()
         {
-            return Input.GetMouseButtonDown(0);
+            if (Input.GetMouseButtonDown(0))
+            {
+                FireButtonPressed?.Invoke();
+            }
         }
     }
 }
