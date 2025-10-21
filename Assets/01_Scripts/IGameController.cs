@@ -1,4 +1,4 @@
-﻿namespace _01_Scripts.BulletLauncherSystem
+﻿namespace _01_Scripts
 {
     public interface IGameController
     {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using _01_Scripts.BulletLauncherSystem;
 using UnityEngine;
 
-namespace _01_Scripts.BulletLauncherSystem
+namespace _01_Scripts
 {
     public class GameManager : MonoBehaviour
     {
@@ -11,15 +11,12 @@ namespace _01_Scripts.BulletLauncherSystem
 
         private void Start()
         {
-            // 총알 발사대 생성: 마우스
+            // 총알 발사대 생성
             _bulletLauncher = Instantiate(bulletLauncher);
 
+            // 마우스
             MouseGameController mouseController = gameObject.AddComponent<MouseGameController>();
             mouseController.FireButtonPressed += _bulletLauncher.OnFireButtonPressed;
-            
-            // 키보드
-            KeyGameController keyController = gameObject.AddComponent<KeyGameController>();
-            keyController.FireButtonPressed += _bulletLauncher.OnFireButtonPressed;
         }
 
         private void OnDestroy()
