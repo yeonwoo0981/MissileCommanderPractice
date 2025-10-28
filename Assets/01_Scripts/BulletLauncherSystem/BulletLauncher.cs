@@ -9,6 +9,9 @@ namespace _01_Scripts.BulletLauncherSystem
         private Bullet _bullet;
         private Factory _bulletFactory;
         
+        [SerializeField] private Explosion explosionPrefab;
+        private Factory _explosionFactory;
+        
         [SerializeField] float fireDelay = 0.5f;
         private float _elapsedFireTime;
         private bool _canShoot = true;
@@ -18,6 +21,7 @@ namespace _01_Scripts.BulletLauncherSystem
         
         private void Start()
         {
+            _explosionFactory = new Factory(explosionPrefab);
             _bulletFactory = new Factory(bulletPrefab);
         }
         
@@ -50,9 +54,15 @@ namespace _01_Scripts.BulletLauncherSystem
 
         private void OnBulletDestroyed(Bullet usedBullet)
         {
+            Vector3 lastPos = usedBullet.transform.position;
+            
             usedBullet.Destroyed -= OnBulletDestroyed;
-
+            
             _bulletFactory.Restore(usedBullet);
+            
+            Explosion explosion = _explosionFactory.Get() as Explosion;
+            if (explosion)
+                explosion.transform.position = lastPos;
         }
 
         private void OnDestroy()

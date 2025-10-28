@@ -11,7 +11,7 @@ namespace _01_Scripts
         private Vector3 _targetPos;
 
         private bool _isActivated = false;
-
+        
         public Action<Bullet> Destroyed;
         private void Start()
         {
