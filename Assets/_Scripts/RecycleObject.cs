@@ -6,22 +6,22 @@ public class RecycleObject : MonoBehaviour
     protected bool IsActivated = false;
 
     protected Vector3 TargetPos;
-    
+
     public Action<RecycleObject> Destroyed;
 
-    // í­ë°œìš©
+    // Æø¹ß¿ë
     public virtual void Activate(Vector3 pos)
     {
         IsActivated = true;
         transform.position = pos;
     }
-    
-    // ì´ì•Œìš©
+
+    // ÃÑ¾Ë¿ë
     public virtual void Activate(Vector3 startPos, Vector3 targetPos)
     {
         transform.position = startPos;
-        TargetPos = targetPos;
-        
+        this.TargetPos = targetPos;
+
         Vector3 dir = (targetPos - startPos).normalized;
         transform.rotation = Quaternion.LookRotation(transform.forward, dir);
 

@@ -2,26 +2,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ÇÁ¸®ÆÕÀ» ´ãÀ» º¯¼öµé ¼±¾ð
     [SerializeField]
     private BulletLauncher launcherPrefab;
 
-    [SerializeField] private Transform launcherLocator;
-    
-    // ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ÀÎ½ºÅÏ½º¸¦ ÂüÁ¶ÇÒ º¯¼ö ¼±¾ð
     private BulletLauncher _launcher;
+
+    // ÃÑ¾Ë ¹ß»ç´ë ¼öµ¿ ÁöÁ¤¿ë º¯¼ö ¼±¾ð
+    [SerializeField] private Transform launcherLocator;
 
     private void Start()
     {   
-        // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ÃÑ¾Ë ¹ß»ç´ë »ý¼º
         _launcher = Instantiate(launcherPrefab);
-        
+
+        // ÃÑ¾Ë ¹ß»ç´ë À§Ä¡ ÁöÁ¤
         _launcher.transform.position = launcherLocator.position;
-        
-        // MouseGameControllerï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½Ö°ï¿½
+
+        // MouseGameController¸¦ ºÙ¿©ÁÖ°í
         MouseGameController mouseGameController = gameObject.AddComponent<MouseGameController>();
 
-        // MouseGameControllerï¿½ï¿½ Actionï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾Ë¹ß»ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // MouseGameControllerÀÇ Actionº¯¼ö¿¡ ÃÑ¾Ë¹ß»ç´ëÀÇ ÇÔ¼ö¸¦ ¿¬°á
         mouseGameController.FireButtonPressed += _launcher.OnFireButtonPressed;
     }
 }

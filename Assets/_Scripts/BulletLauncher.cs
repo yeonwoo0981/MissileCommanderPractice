@@ -8,14 +8,14 @@ public class BulletLauncher : MonoBehaviour
 
     [SerializeField] Explosion explosionPrefab;
 
-    // ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½à¼®ï¿½ï¿½
+    // ÆÑÅä¸®¿¡¼­ °ü¸®ÇÏ´Â ³à¼®µé
     private Factory _bulletFactory;
     private Factory _explosionFactory;
 
     [SerializeField] Transform firePosition;
 
 
-    // ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ë¿¡ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ÄðÅ¸ÀÓ Àû¿ë¿¡ ÇÊ¿äÇÑ º¯¼öµé ¼±¾ð
     [SerializeField] float fireDelay = 0.5f;
     float _elapsedFireTime;
     bool _canShoot = true;
@@ -45,12 +45,12 @@ public class BulletLauncher : MonoBehaviour
         if (!_canShoot)
             return;
 
-        RecycleObject _bullet = _bulletFactory.Get();
+        RecycleObject _bullet = _bulletFactory.Get() as Bullet;
         if (_bullet)
         {
             _bullet.Activate(firePosition.position, pos);
 
-            // ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½(ï¿½ï¿½ï¿½ï¿½)
+            // ÃÑ¾ËÀÌ ÆÄ±«µÉ ¶§ ÀÌº¥Æ®¸¦ ¹ÙÀÎµù(¿¬°á)
             _bullet.Destroyed += OnBulletDestroyed;
         }
 
@@ -59,27 +59,27 @@ public class BulletLauncher : MonoBehaviour
 
     private void OnBulletDestroyed(RecycleObject usedBullet)
     {
-        // ï¿½Ñ¾ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½,
+        // ÃÑ¾ËÀÌ È¸¼öµÇ±âÀü¿¡ ¸¶Áö¸· À§Ä¡¸¦ ÀúÀåÇÏ°í,
         Vector3 lastBulletPos = usedBullet.transform.position;
 
-        // ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Îµï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+        // ÆÄ±«µÉ ÃÑ¾ËÀ» ¾ð¹ÙÀÎµù(¿¬°á ÇØÁ¦)
         usedBullet.Destroyed -= OnBulletDestroyed;
 
-        // ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å´
+        // ÆÄ±«µÈ ÃÑ¾ËÀº ´Ù½Ã ÆÑÅä¸®·Î º¹±Í ½ÃÅ´
         _bulletFactory.Restore(usedBullet);
 
-        // _explosionFactory.Get()ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¿ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å²ï¿½ï¿½
+        // _explosionFactory.Get()À» ÅëÇØ Æø¹ßÈ¿°ú ÇÏ³ª¸¦ °¡Á®¿Â µÚ, ¸¶Áö¸· À§Ä¡¿¡ À§Ä¡½ÃÅ²´Ù
         RecycleObject explosion = _explosionFactory.Get();
         if (explosion)
         {
-            explosion.Destroyed += OnExplosionDestroyed;
             explosion.Activate(lastBulletPos);
+            explosion.Destroyed += OnExplosionDestroyed;
         }
     }
 
-    private void OnExplosionDestroyed(RecycleObject obj)
+    private void OnExplosionDestroyed(RecycleObject usedExplosion)
     {
-        obj.Destroyed -= OnExplosionDestroyed;
-        _explosionFactory.Restore(obj);
+        usedExplosion.Destroyed -= OnExplosionDestroyed;
+        _explosionFactory.Restore(usedExplosion);
     }
 }

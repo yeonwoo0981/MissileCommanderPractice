@@ -5,7 +5,8 @@ public class Bullet : RecycleObject
 {
     [SerializeField]
     float moveSpeed = 5f;
-    
+
+
     private void Update()
     {
         if (!IsActivated)
@@ -16,7 +17,8 @@ public class Bullet : RecycleObject
         if(IsArrivedToTarget())
         {
             IsActivated = false;
-            
+
+            // 이벤트 발생
             Destroyed?.Invoke(this);
         }
     }
