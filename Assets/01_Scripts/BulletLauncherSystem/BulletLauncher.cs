@@ -62,7 +62,9 @@ namespace _01_Scripts.BulletLauncherSystem
             
             Explosion explosion = _explosionFactory.Get() as Explosion;
             if (explosion)
+            {
                 explosion.transform.position = lastPos;
+            }
         }
 
         private void OnDestroy()
