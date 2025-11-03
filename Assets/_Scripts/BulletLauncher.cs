@@ -8,18 +8,18 @@ public class BulletLauncher : MonoBehaviour
 
     [SerializeField] Explosion explosionPrefab;
 
-    // ÆÑÅä¸®¿¡¼­ °ü¸®ÇÏ´Â ³à¼®µé
+    // ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½à¼®ï¿½ï¿½
     private Factory _bulletFactory;
     private Factory _explosionFactory;
 
     [SerializeField] Transform firePosition;
-
-
-    // ÄðÅ¸ÀÓ Àû¿ë¿¡ ÇÊ¿äÇÑ º¯¼öµé ¼±¾ð
+    
+    // ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ë¿¡ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] float fireDelay = 0.5f;
     float _elapsedFireTime;
     bool _canShoot = true;
 
+    private bool _isGameStarted = false;
 
     private void Start()
     {
@@ -29,6 +29,9 @@ public class BulletLauncher : MonoBehaviour
 
     private void Update()
     {
+        if (!_isGameStarted)
+            return;
+        
         if (!_canShoot)
         {
             _elapsedFireTime += Time.deltaTime;
@@ -42,6 +45,9 @@ public class BulletLauncher : MonoBehaviour
 
     public void OnFireButtonPressed(Vector3 pos)
     {
+        if (!_isGameStarted)
+            return;
+        
         if (!_canShoot)
             return;
 
@@ -50,7 +56,7 @@ public class BulletLauncher : MonoBehaviour
         {
             _bullet.Activate(firePosition.position, pos);
 
-            // ÃÑ¾ËÀÌ ÆÄ±«µÉ ¶§ ÀÌº¥Æ®¸¦ ¹ÙÀÎµù(¿¬°á)
+            // ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½(ï¿½ï¿½ï¿½ï¿½)
             _bullet.Destroyed += OnBulletDestroyed;
         }
 
@@ -59,16 +65,16 @@ public class BulletLauncher : MonoBehaviour
 
     private void OnBulletDestroyed(RecycleObject usedBullet)
     {
-        // ÃÑ¾ËÀÌ È¸¼öµÇ±âÀü¿¡ ¸¶Áö¸· À§Ä¡¸¦ ÀúÀåÇÏ°í,
+        // ï¿½Ñ¾ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½,
         Vector3 lastBulletPos = usedBullet.transform.position;
 
-        // ÆÄ±«µÉ ÃÑ¾ËÀ» ¾ð¹ÙÀÎµù(¿¬°á ÇØÁ¦)
+        // ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Îµï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         usedBullet.Destroyed -= OnBulletDestroyed;
 
-        // ÆÄ±«µÈ ÃÑ¾ËÀº ´Ù½Ã ÆÑÅä¸®·Î º¹±Í ½ÃÅ´
+        // ï¿½Ä±ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å´
         _bulletFactory.Restore(usedBullet);
 
-        // _explosionFactory.Get()À» ÅëÇØ Æø¹ßÈ¿°ú ÇÏ³ª¸¦ °¡Á®¿Â µÚ, ¸¶Áö¸· À§Ä¡¿¡ À§Ä¡½ÃÅ²´Ù
+        // _explosionFactory.Get()ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È¿ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å²ï¿½ï¿½
         RecycleObject explosion = _explosionFactory.Get();
         if (explosion)
         {
@@ -81,5 +87,10 @@ public class BulletLauncher : MonoBehaviour
     {
         usedExplosion.Destroyed -= OnExplosionDestroyed;
         _explosionFactory.Restore(usedExplosion);
+    }
+
+    public void OnGameStarted()
+    {
+        _isGameStarted = true;
     }
 }

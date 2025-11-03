@@ -1,29 +1,69 @@
+using System;
+using _Scripts;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // ÇÁ¸®ÆÕÀ» ´ãÀ» º¯¼öµé ¼±¾ð
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField]
     private BulletLauncher launcherPrefab;
 
-    // ÀÎ½ºÅÏ½º¸¦ ÂüÁ¶ÇÒ º¯¼ö ¼±¾ð
+    // ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private BulletLauncher _launcher;
 
-    // ÃÑ¾Ë ¹ß»ç´ë ¼öµ¿ ÁöÁ¤¿ë º¯¼ö ¼±¾ð
+    // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private Transform launcherLocator;
+    
+    private MouseGameController _mouseGameController;
 
+    [SerializeField] private Building buildingPrefab;
+    [SerializeField] private Transform[] buildingLocators;
+    private BuildingManager _buildingManager;
+    
+    [SerializeField] private Missile missilePrefab;
+    private MissileManager _missileManager;
+
+    private TimeManager _timeManager;
+    
     private void Start()
-    {   
-        // ÃÑ¾Ë ¹ß»ç´ë »ý¼º
+    {
+        // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         _launcher = Instantiate(launcherPrefab);
 
-        // ÃÑ¾Ë ¹ß»ç´ë À§Ä¡ ÁöÁ¤
+        // ï¿½Ñ¾ï¿½ ï¿½ß»ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         _launcher.transform.position = launcherLocator.position;
 
-        // MouseGameController¸¦ ºÙ¿©ÁÖ°í
-        MouseGameController mouseGameController = gameObject.AddComponent<MouseGameController>();
+        // MouseGameControllerï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½Ö°ï¿½
+        _mouseGameController = gameObject.AddComponent<MouseGameController>();
 
-        // MouseGameControllerÀÇ Actionº¯¼ö¿¡ ÃÑ¾Ë¹ß»ç´ëÀÇ ÇÔ¼ö¸¦ ¿¬°á
-        mouseGameController.FireButtonPressed += _launcher.OnFireButtonPressed;
+        _buildingManager = new BuildingManager(buildingPrefab, buildingLocators);
+
+        _timeManager = gameObject.AddComponent<TimeManager>();
+        
+        _missileManager = gameObject.AddComponent<MissileManager>();
+        _missileManager.Initialize(new Factory(missilePrefab), _buildingManager);
+        
+        BindEvents();
+        
+        _timeManager.StartGame();
+    }
+
+    private void OnDestroy()
+    {
+        UnBindEvents();
+    }
+    
+    private void BindEvents()
+    {
+        _mouseGameController.FireButtonPressed += _launcher.OnFireButtonPressed;
+        _timeManager.GameStarted += _buildingManager.OnGameStarted;
+        _timeManager.GameStarted += _launcher.OnGameStarted;
+    }
+    
+    private void UnBindEvents()
+    {
+        _mouseGameController.FireButtonPressed -= _launcher.OnFireButtonPressed;
+        _timeManager.GameStarted -= _buildingManager.OnGameStarted;
+        _timeManager.GameStarted -= _launcher.OnGameStarted;
     }
 }
