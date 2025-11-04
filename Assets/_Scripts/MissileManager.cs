@@ -26,8 +26,6 @@ namespace _Scripts
             Debug.Assert(this._buildingManager != null, "building manager is null!");
 
             _isInitialized = true;
-
-            SpawnMissile(); // 테스트용
         }
 
         private void SpawnMissile()
@@ -36,7 +34,35 @@ namespace _Scripts
             Debug.Assert(this._buildingManager != null, "building manager is null!");
         
             RecycleObject missile = _missileFactory.Get();
-            missile.Activate(Vector3.zero);
+            missile.Activate(GetMissileSpawnPosition(), _buildingManager.GetRandomBuildingPosition());
+            missile.Destroyed += OnMissileDestroyed;
+        }
+
+        private void OnMissileDestroyed(RecycleObject missile)
+        {
+            missile.Destroyed -= OnMissileDestroyed;
+            _missileFactory.Restore(missile);
+        }
+
+        private Vector3 GetMissileSpawnPosition()
+        {
+            Vector3 spawnPosition = Vector3.zero;
+            spawnPosition.x = Random.Range(0f, 1f);
+            spawnPosition.y = 1f;
+    
+            if (Camera.main != null)
+            {
+                spawnPosition = Camera.main.ViewportToWorldPoint(spawnPosition);
+            }
+    
+            spawnPosition.z = 0f;
+    
+            return spawnPosition;
+        }
+        
+        public void OnGameStarted()
+        {
+            SpawnMissile();
         }
     }
 }

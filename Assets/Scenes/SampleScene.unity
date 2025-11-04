@@ -608,6 +608,7 @@ MonoBehaviour:
   - {fileID: 36574437}
   - {fileID: 1898315566}
   missilePrefab: {fileID: 5031393173864898510, guid: 23b43e7bdea2cb544ac875152737436f, type: 3}
+  effectPrefab: {fileID: 4741252343212292823, guid: 973d868d2be11774a92f2c7da6cc59a0, type: 3}
 --- !u!1 &1898315565
 GameObject:
   m_ObjectHideFlags: 0

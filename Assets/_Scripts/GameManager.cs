@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     private TimeManager _timeManager;
     
+    [SerializeField] private DestroyEffect effectPrefab;
     private void Start()
     {
         // �Ѿ� �߻�� ����
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
         // MouseGameController�� �ٿ��ְ�
         _mouseGameController = gameObject.AddComponent<MouseGameController>();
 
-        _buildingManager = new BuildingManager(buildingPrefab, buildingLocators);
+        _buildingManager = new BuildingManager(buildingPrefab, buildingLocators, new Factory(effectPrefab, 2));
 
         _timeManager = gameObject.AddComponent<TimeManager>();
         
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
         _mouseGameController.FireButtonPressed += _launcher.OnFireButtonPressed;
         _timeManager.GameStarted += _buildingManager.OnGameStarted;
         _timeManager.GameStarted += _launcher.OnGameStarted;
+        _timeManager.GameStarted += _missileManager.OnGameStarted;
     }
     
     private void UnBindEvents()
@@ -65,5 +67,6 @@ public class GameManager : MonoBehaviour
         _mouseGameController.FireButtonPressed -= _launcher.OnFireButtonPressed;
         _timeManager.GameStarted -= _buildingManager.OnGameStarted;
         _timeManager.GameStarted -= _launcher.OnGameStarted;
+        _timeManager.GameStarted -= _missileManager.OnGameStarted;
     }
 }
