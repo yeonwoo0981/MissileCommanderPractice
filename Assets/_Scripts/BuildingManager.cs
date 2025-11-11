@@ -9,13 +9,15 @@ namespace _Scripts
         private Building _prefab;
         
         private Factory _effectFactory;
-    
+        
         // 만들어진 빌딩들을 모아서 관리할 Transform 배열
         private Transform[] _buildingLocators;
         
         // 새로 만들 빌딩들을 모두 저장해서 관리할 리스트를 생성
         private List<Building> _buildings = new List<Building>();
-        
+
+        public bool HasBuilding => _buildings.Count > 0;
+
         // 생성자에서 필요한 디펜던시(의존성)를 주입하는 방식을 사용해 보려는 것
         public BuildingManager(Building prefab, Transform[] buildingLocators, Factory effectFactory)
         {

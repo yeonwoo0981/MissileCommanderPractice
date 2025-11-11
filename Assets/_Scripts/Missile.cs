@@ -36,7 +36,15 @@ namespace _Scripts
             {
                 Debug.Log("hit a building!");
                 DestroySelf();
+                return;
             }
+            
+            if (collision.GetComponent<Explosion>() != null)
+            {
+                Debug.Log("hit a Explosion!");
+                DestroySelf();
+            }
+            
         }
 
         private void DestroySelf()

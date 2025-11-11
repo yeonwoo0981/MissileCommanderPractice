@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     private TimeManager _timeManager;
     
+    [SerializeField] private int maxMissileCount = 20;
+    [SerializeField] private float missileSpawnInterval = 0.5f;
+    
     [SerializeField] private DestroyEffect effectPrefab;
     private void Start()
     {
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviour
         _timeManager = gameObject.AddComponent<TimeManager>();
         
         _missileManager = gameObject.AddComponent<MissileManager>();
-        _missileManager.Initialize(new Factory(missilePrefab), _buildingManager);
+        _missileManager.Initialize(new Factory(missilePrefab), _buildingManager, maxMissileCount, missileSpawnInterval);
         
         BindEvents();
         
